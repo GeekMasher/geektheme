@@ -1,15 +1,16 @@
 
-/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-particlesJS.load('particles-js', '/particles.json', function () {
-    console.log('callback - particles.js config loaded');
-});
-
-/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.particlesJS && typeof particlesJS.load === 'function') {
-        particlesJS.load('particles-js', '/particles.json', function () {
-            console.log('callback - particles.js config loaded');
-        });
+    // Initialize particles.js only if the container exists and the library is loaded
+    try {
+        const particlesContainer = document.getElementById('particles-js');
+        if (particlesContainer && window.particlesJS && typeof particlesJS.load === 'function') {
+            particlesJS.load('particles-js', '/particles.json', function () {
+                // eslint-disable-next-line no-console
+                console.log('callback - particles.js config loaded');
+            });
+        }
+    } catch (e) {
+        // If particles library throws or is missing, fail silently.
     }
 
     // Typewriter Effect - initialize only when elements exist and library is present
