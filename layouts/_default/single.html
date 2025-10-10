@@ -13,18 +13,18 @@
     <h1 class="title">{{ .Title }}</h1>
 
     <div class="tip">
-        <time datetime="{{ .PublishDate }}">{{ i18n "publishDateFull" . }}</time>
+        <time datetime="{{ .Date }}">{{ .Date.Format "2006-01-02" }}</time>
         <span class="split">
             ·
         </span>
         <span>
-            {{ i18n "wordCount" . }}
+            {{ .WordCount }} words
         </span>
         <span class="split">
             ·
         </span>
         <span>
-            {{ i18n "minuteRead" . }}
+            {{ .ReadingTime }} min read
         </span>
     </div>
 
