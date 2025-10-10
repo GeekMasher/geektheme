@@ -781,6 +781,50 @@ nav.navigation a {
   color: #0366d6;
 }
 
+/* Large centered datetime display used by the datetime shortcode */
+.bigitem-container {
+  text-align: center;
+  margin: 1.5rem auto;
+  width: fit-content;
+}
+
+.bigitem-container .datetime {
+  font-family: "Roboto Mono", monospace;
+  font-size: 5rem;
+  font-weight: 700;
+  color:#1d1d1d;
+  line-height: 1;
+
+  background: linear-gradient(90deg, #8ac149, #61c419);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bigitem-container .bignum {
+  font-family: "Roboto Mono", monospace;
+  font-size: 5rem;
+  font-weight: 700;
+  color:#1d1d1d;
+  line-height: 1;
+
+  background: linear-gradient(90deg, #8ac149, #61c419);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+@media only screen and (max-width: 520px) {
+  .bigitem-container .datetime {
+    font-size: 2.2rem;
+    margin: 1.5rem 0;
+  }
+  
+  .bignumber-container .bignum {
+    font-size: 2.2rem;
+    margin: 1.5rem 0;
+  }
+}
+
 /* Tags / Taxonomy */
 /*
   Improvements:

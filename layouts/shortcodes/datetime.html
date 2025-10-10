@@ -1,0 +1,77 @@
+{{/*
+Shortcode: datetime
+
+Usage examples:
+  {{< datetime "2025-12-25" >}}                -> default rendering (RFC3339/date)
+  {{< datetime value="2025-12-25" format="02 Jan 2006" >}} -> custom Go time format
+  {{< datetime value="150" format="duration" unit="secs" >}} -> "2mins 30secs"
+  {{< datetime value="130" format="duration" unit="mins" >}} -> "2hrs 10mins"
+  {{< datetime value="2hrs 10mins" format="raw" >}} -> prints the provided human text unchanged
+
+Parameters:
+  - value (positional or named): string or number representing the date or duration
+  - format: "date" (default), a Go time format string, "duration", or "raw"
+  - unit: used with format="duration"; "secs" (default) or "mins"
+  - class: optional CSS class to add to the element
+
+Behavior:
+  - date formatting uses Hugo/Go time layouts via the `time` and `dateFormat` functions.
+  - duration formatting converts numeric values (seconds or minutes) into a human form like "2hrs 10mins".
+*/}}
+
+{{ $raw := .Get "value" | default (.Get 0) | default "" }}
+{{ $format := .Get "format" | default "date" }}
+{{ $unit := .Get "unit" | default "secs" }}
+{{ $class := .Get "class" | default "datetime" }}
+
+<div class="bigitem-container">
+{{/* If user explicitly asks for raw, print the value unchanged */}}
+{{ if eq $format "raw" }}
+  <span class="{{ $class }}">{{ $raw }}</span>
+  {{/* done */}}
+{{ else if eq $format "duration" }}
+  {{/* Parse numeric durations. Allow input like "2hrs 10mins" to pass through if not numeric. */}}
+  {{ $isNum := cond (or (findRE "^\\d+$" $raw) (findRE "^\\d+\\.\\d+$" $raw)) true false }}
+  {{ if not $isNum }}
+    {{/* try to parse values like '130' with unit maybe provided as attribute */}}
+    {{ $txt := $raw }}
+    <span class="{{ $class }}">{{ $txt }}</span>
+  {{ else }}
+    {{ $num := $raw | float }}
+    {{ if eq $unit "mins" }}
+      {{ $secs := mul $num 60 }}
+    {{ else }}
+      {{ $secs := $num }}
+    {{ end }}
+    {{/* We need a working seconds variable in all branches; compute using apply to a variable */}}
+    {{ $secs := cond (eq $unit "mins") (mul $num 60) $num }}
+    {{ $hrs := div $secs 3600 | int }}
+    {{ $rem := mod $secs 3600 }}
+    {{ $mins := div $rem 60 | int }}
+    {{ $secsRem := mod $rem 60 | int }}
+    {{ $out := slice }}
+    {{ if gt $hrs 0 }}
+      {{ $out = $out | append (printf "%dhrs" $hrs) }}
+    {{ end }}
+    {{ if gt $mins 0 }}
+      {{ $out = $out | append (printf "%dmins" $mins) }}
+    {{ end }}
+    {{ if and (eq $hrs 0) (eq $mins 0) (gt $secsRem 0) }}
+      {{ $out = $out | append (printf "%dsecs" $secsRem) }}
+    {{ end }}
+    <span class="{{ $class }}">{{ delimit $out " " }}</span>
+  {{ end }}
+
+{{ else }}
+  {{/* Treat as date formatting. Try to parse various date shapes; if parsing fails, print raw */}}
+  {{ $t := time $raw }}
+  {{ if not $t }}
+    <span class="{{ $class }}">{{ $raw }}</span>
+  {{ else }}
+    {{/* Determine the date format to use (Go layout). Default is 02 Jan 2006 */}}
+    {{ $fmt := cond (or (eq $format "date") (eq $format "")) "02 Jan 2006" $format }}
+    {{/* Print using dateFormat which expects Go layouts */}}
+    <span class="{{ $class }}">{{ dateFormat $fmt $t }}</span>
+  {{ end }}
+{{ end }}
+</div>

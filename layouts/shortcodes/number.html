@@ -1,0 +1,146 @@
+{{/*
+Shortcode: number
+
+Usage examples:
+  {{< number value="1234567" >}}
+  {{< number 1234567 >}} (positional)
+  {{< number value="1234567" format="commas" >}}
+  {{< number value="1234567" format="abbr" decimals="2" class="big" >}}
+
+Parameters:
+  - value (positional or named): the numeric value to format
+  - format: "abbr" (default) or "commas"
+  - decimals: number of decimals for abbreviated output (default 1)
+  - class: optional CSS class applied to the output element
+
+Behavior:
+  - format="abbr" => server-side abbreviation (K, M, B). Examples: 1.2K, 3.4M
+  - format="commas" => client-side comma grouping using toLocaleString (for large integers)
+*/}}
+
+{{ $raw := .Get "value" | default (.Get 0) | default "0" }}
+{{ $format := .Get "format" | default "abbr" }}
+{{ $dec := (.Get "decimals" | default "1") | int }}
+{{ $class := .Get "class" | default "" }}
+{{ $currencyCode := .Get "currencyCode" | default "" }}
+{{ $currencySymbol := .Get "currencySymbol" | default "" }}
+{{ $currencyPos := .Get "currencyPos" | default "prefix" }}
+{{/* derive a sensible symbol from code when symbol not provided */}}
+{{ $sym := $currencySymbol }}
+{{ if and (eq $sym "") (ne $currencyCode "") }}
+  {{ if eq $currencyCode "GBP" }}
+    {{ $sym = "£" }}
+  {{ else if eq $currencyCode "USD" }}
+    {{ $sym = "$" }}
+  {{ else if eq $currencyCode "EUR" }}
+    {{ $sym = "€" }}
+  {{ else }}
+    {{ $sym = $currencyCode }}
+  {{ end }}
+{{ end }}
+
+<div class="bigitem-container">
+{{/* Try to convert to a float for numeric comparisons. Non-numeric inputs will become 0. */}}
+{{ $n := $raw | float }}
+{{ if eq $format "commas" }}
+  {{/* Output a span with the raw value and a small JS formatter to add grouping/decimals */}}
+  <span class="bignum {{ $class }}" data-value="{{ $raw | htmlEscape }}" data-decimals="{{ $dec }}" data-currency-code="{{ $currencyCode }}" data-currency-symbol="{{ $sym }}" data-currency-pos="{{ $currencyPos }}">{{ $raw | htmlEscape }}</span>
+  <script>
+  (function(){
+    if (typeof window === 'undefined') return;
+    if (window._geektheme_bignum_formatter) return;
+    window._geektheme_bignum_formatter = true;
+    function format(el){
+      var v = el.getAttribute('data-value');
+      var d = parseInt(el.getAttribute('data-decimals')||'0',10);
+      var ccode = el.getAttribute('data-currency-code') || '';
+      var csym = el.getAttribute('data-currency-symbol') || '';
+      var cpos = el.getAttribute('data-currency-pos') || 'prefix';
+      var num = Number(v);
+      if (!isFinite(num)) return;
+      // Use toLocaleString so formatting respects the reader locale
+      try {
+        if (ccode) {
+          // Use currency formatting when code provided
+          // Format using absolute value then re-apply sign so we can control symbol placement
+          var sign = num < 0 ? '-' : '';
+          var abs = Math.abs(num);
+          var formatted = abs.toLocaleString(undefined, {style: 'currency', currency: ccode, maximumFractionDigits: d});
+          // formatted will already include the currency symbol in a locale-specific way; keep as-is
+          el.textContent = sign + formatted.replace(/^-/,'');
+        } else {
+          var formatted = num.toLocaleString(undefined, {maximumFractionDigits: d});
+          if (csym) {
+            // Place symbol before or after, keep sign on the left
+            var sign = formatted.charAt(0) === '-' ? '-' : '';
+            var body = sign ? formatted.slice(1) : formatted;
+            if (cpos === 'prefix') el.textContent = sign + csym + body; else el.textContent = sign + body + (csym.indexOf('%')===-1?(' '+csym):csym);
+          } else {
+            el.textContent = formatted;
+          }
+        }
+      } catch(e) {
+        // fallback
+        el.textContent = num.toString();
+      }
+    }
+    function run(){
+      var els = document.querySelectorAll('span.bignum');
+      for (var i=0;i<els.length;i++) format(els[i]);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  })();
+  </script>
+{{ else }}
+  {{/* Abbreviated output server-side: B, M, K. Keep sign and allow decimals. */}}
+  {{ $sign := "" }}
+  {{ if lt $n 0 }}
+    {{ $sign = "-" }}
+    {{ $n = mul $n -1 }}
+  {{ end }}
+
+  {{ if ge $n 1000000000 }}
+    {{ $fmt := printf "%%.%df" $dec }}
+    {{ $val := printf $fmt (div $n 1000000000) }}
+    {{ if eq $currencyPos "prefix" }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $sym }}{{ $val }}B</span>
+    {{ else }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $val }}B{{ if ne $sym "" }} {{ $sym }}{{ end }}</span>
+    {{ end }}
+  {{ else if ge $n 1000000 }}
+    {{ $fmt := printf "%%.%df" $dec }}
+    {{ $val := printf $fmt (div $n 1000000) }}
+    {{ if eq $currencyPos "prefix" }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $sym }}{{ $val }}M</span>
+    {{ else }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $val }}M{{ if ne $sym "" }} {{ $sym }}{{ end }}</span>
+    {{ end }}
+  {{ else if ge $n 1000 }}
+    {{ $fmt := printf "%%.%df" $dec }}
+    {{ $val := printf $fmt (div $n 1000) }}
+    {{ if eq $currencyPos "prefix" }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $sym }}{{ $val }}K</span>
+    {{ else }}
+      <span class="bignum {{ $class }}">{{ $sign }}{{ $val }}K{{ if ne $sym "" }} {{ $sym }}{{ end }}</span>
+    {{ end }}
+  {{ else }}
+    {{/* For small numbers, show as integer if it is effectively an integer, otherwise with requested decimals */}}
+    {{ $int := $n | int }}
+    {{ if eq (printf "%d" $int) (printf "%v" $n) }}
+      {{ if eq $currencyPos "prefix" }}
+        <span class="bignum {{ $class }}">{{ $sign }}{{ $sym }}{{ $int }}</span>
+      {{ else }}
+        <span class="bignum {{ $class }}">{{ $sign }}{{ $int }}{{ if ne $sym "" }} {{ $sym }}{{ end }}</span>
+      {{ end }}
+    {{ else }}
+      {{ $fmt := printf "%%.%df" $dec }}
+      {{ $val := printf $fmt $n }}
+      {{ if eq $currencyPos "prefix" }}
+        <span class="bignum {{ $class }}">{{ $sign }}{{ $sym }}{{ $val }}</span>
+      {{ else }}
+        <span class="bignum {{ $class }}">{{ $sign }}{{ $val }}{{ if ne $sym "" }} {{ $sym }}{{ end }}</span>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+</div>
