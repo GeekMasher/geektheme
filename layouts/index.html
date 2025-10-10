@@ -27,24 +27,26 @@
         </section>
     {{ end }}
 
-    {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
-        <div class="pagination">
-          {{ if $paginator.HasPrev }}
-              <span class="prev">
-                  <a href="{{.Paginator.Prev.URL}}">
-                    <span class="iconify" data-icon="mdi:arrow-left"></span> {{ with .Site.Params.newerPosts }}{{ . }}{{ else }}{{ i18n "postsNewer" }}{{ end }}
-                  </a>
-            </span>
-          {{ end }}
-          
-          {{ if $paginator.HasNext }}
-              <span class="next">
-                  <a href="{{.Paginator.Next.URL}}">
-                      {{ with .Site.Params.olderPosts }}{{ . }}{{ else }}{{ i18n "postsOlder" }}{{ end }} <span class="iconify" data-icon="mdi:arrow-right"></span>
-                  </a>
-              </span>
-          {{ end }}
-        </div>
-    {{ end }}
+  {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
+    <div class="pagination">
+      {{ if $paginator.HasPrev }}
+        <span class="prev">
+          <a href="{{ $paginator.Prev.URL }}" rel="prev">
+          <span class="iconify" data-icon="mdi:arrow-left" aria-hidden="true"></span>
+          <span class="label">{{ with .Site.Params.newerPosts }}{{ . }}{{ else }}{{ i18n "postsNewer" }}{{ end }}</span>
+          </a>
+        </span>
+      {{ end }}
+
+      {{ if $paginator.HasNext }}
+        <span class="next">
+          <a href="{{ $paginator.Next.URL }}" rel="next">
+            <span class="label">{{ with .Site.Params.olderPosts }}{{ . }}{{ else }}{{ i18n "postsOlder" }}{{ end }}</span>
+            <span class="iconify" data-icon="mdi:arrow-right" aria-hidden="true"></span>
+          </a>
+        </span>
+      {{ end }}
+    </div>
+  {{ end }}
 </div>
 {{ end }}
