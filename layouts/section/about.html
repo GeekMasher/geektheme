@@ -1,0 +1,9 @@
+{{ define "main" }}
+{{ partial "header.html" . }}
+
+<div id="list-page">
+    {{ .Content }}
+
+    {{ partial "comment.html" . }}
+</div>
+{{ end }}
