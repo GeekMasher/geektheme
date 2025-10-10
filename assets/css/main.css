@@ -1107,35 +1107,34 @@ th.sortable {
 }
 
 /* Legacy table styles kept where specific: basic markdown tables fallback */
+/* Legacy table styles replaced: dark theme table fallback */
 table th,
 table td {
   text-align: left;
-  padding-right: 20px;
-  vertical-align: top;
+  padding: 0.6rem 0.9rem;
+  vertical-align: middle;
 }
 table td {
-  border-spacing: none;
-  border-style: solid;
-  padding: 10px 15px;
-  border-width: 1px 0 0 0;
+  border: none;
+  padding: 0.6rem 0.9rem;
 }
 thead th,
 th {
   text-align: left;
-  padding: 10px 15px;
-  height: 20px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #444;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--nav-accent);
   cursor: default;
   white-space: nowrap;
-  border: 1px solid #dadadc;
+  background: rgba(29,29,29,0.9);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 tr > td {
-  border: 1px solid #dadadc;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
 }
 tr:nth-child(odd) > td {
-  background: #fcfcfc;
+  background: rgba(138,193,73,0.02);
 }
 
 @media only screen and (max-width: 720px) {
