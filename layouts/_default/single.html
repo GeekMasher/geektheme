@@ -1,0 +1,64 @@
+{{ define "main" }}
+
+{{ if .Params.banner }}
+<figure class="banner">
+    <img src="{{ .Params.banner.path }}" alt="{{ .Params.banner.caption }}">
+    <a href="{{ .Params.banner.link }}">
+        <figcaption>© {{ .Params.banner.caption }}</figcaption>
+    </a>
+</figure>
+{{ end }}
+
+<section id="single">
+    <h1 class="title">{{ .Title }}</h1>
+
+    <div class="tip">
+        <time datetime="{{ .PublishDate }}">{{ i18n "publishDateFull" . }}</time>
+        <span class="split">
+            ·
+        </span>
+        <span>
+            {{ i18n "wordCount" . }}
+        </span>
+        <span class="split">
+            ·
+        </span>
+        <span>
+            {{ i18n "minuteRead" . }}
+        </span>
+    </div>
+
+    {{ if or .Site.Params.showToc .Params.showToc }}
+    {{ partial "toc.html" . }}
+    {{ end }}
+
+    <div class="content">
+        {{ .Content }}
+    </div>
+
+    <div id="donate" class="center">
+        <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+            data-name="bmc-button" data-slug="geekmasher" data-color="#40DCA5" data-emoji="" data-font="Cookie"
+            data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff"
+            data-coffee-color="#FFDD00"></script>
+    </div>
+
+    {{ with .Params.tags }}
+    <div class="tags">
+        {{ range . }}
+        <a href="{{ " tags/" | absURL }}{{ . | urlize }}">{{ . }}</a>
+        {{ end }}
+    </div>
+    {{ end}}
+
+    <script src="https://giscus.app/client.js" data-repo="GeekMasher/geekmasher.dev"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxOTIyMDQ5OTY=" data-category="General" data-category-id="DIC_kwDOC3TQxM4Cggn4"
+        data-mapping="title" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0"
+        data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" data-loading="lazy"
+        crossorigin="anonymous" async>
+        </script>
+    {{ partial "comment.html" . }}
+
+</section>
+
+{{ end }}

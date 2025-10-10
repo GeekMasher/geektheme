@@ -1,0 +1,56 @@
+<nav class="navigation modern-nav" aria-label="Main Navigation">
+	<div class="nav-inner">
+		<ul class="nav-left">
+			{{ if not .IsHome }}
+				<li>
+					<a id="home-button" class="nav-btn" href="{{ "/" | relURL }}" title="Home" aria-label="Home">
+						<span class="iconify nav-icon" data-icon="mdi-home" aria-hidden="true"></span>
+						<span class="sr-only">{{ with .Site.Params.home }}{{ . }}{{ else }}{{ i18n "home" }}{{ end }}</span>
+					</a>
+				</li>
+			{{ end }}
+		</ul>
+		<ul class="nav-right">
+			<li>
+				<a href="{{ "/posts" | relURL }}" class="nav-btn" title="Archive" aria-label="Archive">
+					<span class="iconify nav-icon" data-icon="mdi-archive" aria-hidden="true"></span>
+					<span class="sr-only">{{ with .Site.Params.archive }}{{ . }}{{ else }}{{ i18n "archive" }}{{ end }}</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="{{ "/tags" | relURL }}" class="nav-btn" title="Tags" aria-label="Tags">
+					<span class="iconify nav-icon" data-icon="mdi-tag-outline" aria-hidden="true"></span>
+					<span class="sr-only">{{ with .Site.Params.tags }}{{ . }}{{ else }}{{ i18n "tags" }}{{ end }}</span>
+				</a>
+			</li>
+
+			{{ range $element := .Site.Params.Links }}
+				<li>
+					<a href="{{ $element.path }}" class="nav-btn" title="{{ $element.name }}" aria-label="{{ $element.name }}">
+						<span class="iconify nav-icon" data-icon="mdi-link-variant" aria-hidden="true"></span>
+						<span class="sr-only">{{ $element.name }}</span>
+					</a>
+				</li>
+			{{ end }}
+
+			<li>
+				<a href="{{ "/about" | relURL }}" class="nav-btn" title="About" aria-label="About">
+					<span class="iconify nav-icon" data-icon="mdi-account" aria-hidden="true"></span>
+					<span class="sr-only">{{ with .Site.Params.about }}{{ . }}{{ else }}{{ i18n "about" }}{{ end }}</span>
+				</a>
+			</li>
+
+			{{ if .OutputFormats.Get "RSS" }}
+				{{ with .OutputFormats.Get "RSS" }}
+					<li>
+						<a class="nav-btn nav-rss" href="{{ .RelPermalink }}" title="Subscribe RSS" aria-label="Subscribe RSS">
+							<span class="iconify nav-icon" data-icon="mdi-rss" aria-hidden="true"></span>
+							<span class="sr-only">Subscribe</span>
+						</a>
+					</li>
+				{{ end }}
+			{{ end }}
+		</ul>
+	</div>
+</nav>
