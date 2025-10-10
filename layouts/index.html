@@ -8,20 +8,19 @@
         {{ $title := .Title }}
         {{ $summary := .Summary }}
         <section class="item">
-          <div>
-            <h2 class="title"><a href='{{ .RelPermalink }}'>{{ $title }}</a></h2>
-            <div class ="date">
-                <time datetime="{{ .PublishDate }}">{{ i18n "publishDate" . }}</time>  
-            </div>
-          </div>
+          <h2 class="title"><a href='{{ .RelPermalink }}'>{{ $title }}</a></h2>
 
           <a href='{{ .RelPermalink }}'>
             <img src="{{ .Params.banner.path }}" alt="{{ $title }}" />
           </a>
 
+          <div class ="date">
+            <time datetime="{{ .PublishDate }}">{{ i18n "publishDate" . }}</time>  
+          </div>
+
           {{ if ne .Site.Params.hiddenPostSummaryInHomePage true }}
               <div class="summary">
-              {{ $summary | plainify | htmlUnescape }}... <a href="{{ .Permalink }}">Read more →</a>
+                <p class="summary-text">{{ $summary | plainify | htmlUnescape }}</p>
               </div>
           {{ end }}
         </section>

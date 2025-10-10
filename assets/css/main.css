@@ -38,6 +38,54 @@ pre {
 }
 
 /* Inline code */
+  
+/* Responsive embed utilities for slides/iframes */
+.embed-responsive,
+.slides-embed {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio default */
+  overflow: hidden;
+  background: transparent;
+}
+.embed-responsive iframe,
+.slides-embed iframe,
+.embed-responsive object,
+.embed-responsive embed,
+.slides-embed object,
+.slides-embed embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Fallback for raw iframes inserted without a wrapper: make them fluid and keep aspect ratio where supported */
+.content iframe,
+.item iframe,
+.summary iframe,
+iframe[src*="slides"],
+iframe[src*="reveal"],
+iframe[src*="docs.google"],
+iframe[src*="slideshare"] {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 0;
+  /* browsers that support it will use aspect-ratio; others fall back to height:auto */
+  aspect-ratio: 16 / 9;
+}
+
+@media only screen and (max-width: 520px) {
+  .embed-responsive,
+  .slides-embed {
+    padding-bottom: 66.66%; /* slightly taller on narrow screens */
+  }
+}
 p code {
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier,
     monospace;
@@ -524,13 +572,12 @@ nav.navigation a {
   position: relative;
   top: 1px;
 }
-#list-page .summary {
+#list-page .item .summary {
   color: #fff;
   font-size: 1rem;
-  margin: 0 3rem 1rem 3rem;
+  margin: 1rem;
   word-break: normal;
   overflow-wrap: anywhere;
-  margin-bottom: 36px;
 }
 .item img {
   width: 100%;
@@ -542,6 +589,34 @@ nav.navigation a {
   transform: scale(1.04) rotate(-1deg);
   box-shadow: 0 8px 32px rgba(138, 193, 73, 0.18),
     0 1.5px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Make list-page item images full-width on mobile */
+@media only screen and (max-width: 720px) {
+  /* Ensure the cover container doesn't constrain the image */
+  #list-page .cover {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 0;
+    background: transparent;
+  }
+
+  /* Images span the full content width and remove extra margins */
+  #list-page .cover img,
+  .item img {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Small adjustment so list items don't have extra horizontal padding */
+  #list-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 /* Archive listing */
@@ -1163,5 +1238,136 @@ tr:nth-child(odd) > td {
   }
   tbody tr:nth-child(odd) {
     background: #fff;
+  }
+}
+
+/* Mobile improvements: better responsive font sizes, avoid overflow, reduce large paddings */
+html {
+  -webkit-text-size-adjust: 100%; /* prevents unexpected font scaling on iOS */
+}
+
+/* Fluid/limited hero/typewriter sizes and ensure they respect the viewport */
+#title {
+  font-size: clamp(1.6rem, 6vw, 4rem);
+  padding: 0 12px;
+  box-sizing: border-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#typewriter-main {
+  font-size: clamp(1.25rem, 4.5vw, 2.5rem);
+  padding: 0 12px;
+  box-sizing: border-box;
+  white-space: normal;
+}
+#typewriter-info {
+  font-size: clamp(1rem, 3.6vw, 1.5rem);
+  padding: 0 12px;
+  box-sizing: border-box;
+  height: auto;
+  white-space: normal;
+}
+
+/* Make avatar and large fixed paddings scale on small screens */
+.profile .avatar {
+  width: clamp(72px, 20vw, 150px);
+  height: clamp(72px, 20vw, 150px);
+}
+
+/* Reduce wide content padding on smaller screens so text lines don't overflow */
+@media only screen and (max-width: 720px) {
+  #single {
+    padding: 0 16px;
+    margin: 32px auto 0 auto;
+  }
+  #single .title {
+    font-size: clamp(1.25rem, 6vw, 1.8rem);
+    line-height: 1.2;
+  }
+  #list-page .summary {
+    margin: 0;
+  }
+  #list-page .date,
+  #page-404 .date {
+    display: block;
+    width: 100%;
+    float: none;
+    text-align: left;
+    position: static;
+    margin-top: 8px;
+  }
+  /* Allow tables to shrink inside the responsive wrapper */
+  table {
+    min-width: 0;
+    font-size: 0.92rem;
+  }
+  .table-responsive {
+    padding: 0.25rem;
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  /* Tighter spacing and slightly smaller text for very small screens */
+  body {
+    font-size: 14px;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+  #single {
+    padding: 0 12px;
+    margin: 20px auto 0 auto;
+  }
+  /* Ensure tag chips wrap nicely */
+  #tags .tag a {
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+  /* Ensure hero/typewriter content doesn't overlap */
+  #title,
+  #typewriter-main,
+  #typewriter-info {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Improve list-page headings on mobile for readability and tappability */
+@media only screen and (max-width: 720px) {
+  /* target both h2 elements and the .title helper used in templates */
+  #list-page h2,
+  #list-page .title {
+    font-size: clamp(1.05rem, 5.2vw, 1.35rem);
+    line-height: 1.25;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--nav-accent);
+    width: 100%;
+    display: block;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* Make the title link fill the row so it's easier to tap */
+  #list-page .title a {
+    display: block;
+    padding: 8px 6px;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #list-page .title a:hover,
+  #list-page .title a:focus {
+    background: rgba(138, 193, 73, 0.06);
+    text-decoration: none;
+    outline: none;
+  }
+
+  /* Add subtle spacing under each list item for separation on mobile */
+  #list-page .item {
+    padding-bottom: 12px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
   }
 }

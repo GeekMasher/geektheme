@@ -1,0 +1,30 @@
+{{/*
+  Shortcode: embed
+  Usage (in content):
+  {{< embed src="https://docs.google.com/presentation/d/e/.../embed?start=false&loop=false&delayms=3000" ratio="16:9" >}}
+
+  Params:
+  - src (string) - iframe src (or pass as positional param)
+  - ratio (string) - aspect ratio like "16:9" or "4:3" (defaults to 16:9)
+  - allow (optional) - allow attribute for iframe (e.g. "autoplay; encrypted-media")
+*/}}
+{{ $src := .Get "src" }}
+{{ if not $src }}{{ $src = .Get 0 }}{{ end }}
+{{ $ratio := .Get "ratio" | default "16:9" }}
+{{ $allow := .Get "allow" | default "" }}
+{{ if $src }}
+  {{/* parse ratio into padding-bottom percentage */}}
+  {{ $parts := split $ratio ":" }}
+  {{ $w := index $parts 0 | default "16" }}
+  {{ $h := index $parts 1 | default "9" }}
+  {{ $wNum := int $w }}
+  {{ $hNum := int $h }}
+  {{ $padding := mul (div $hNum $wNum) 100 }}
+
+  <div class="embed-responsive" style="padding-bottom: {{ printf "%.4f" $padding }}%;">
+    <iframe src="{{ $src }}" frameborder="0" allowfullscreen aria-hidden="false" {{ if ne $allow "" }}allow="{{ $allow }}"{{ end }}></iframe>
+  </div>
+{{ else }}
+  <!-- embed shortcode: missing src -->
+  <p class="embed-error">Embed shortcode requires a src parameter.</p>
+{{ end }}
