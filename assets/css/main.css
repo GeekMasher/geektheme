@@ -18,11 +18,26 @@ body {
   color: #ebebeb;
 }
 
-h1,
-h2,
-h3 {
-  font-weight: 400;
+h1 {
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f2f2f2;
+  margin-bottom: 0.3em;
 }
+
+h2,
+h3,
+h4 {
+  font-weight: 400;
+  color: #8ac149;
+}
+h2:hover, h3:hover, h4:hover {
+  color: #a7df67;
+  text-decoration: underline;
+}
+
+
 /* Paragraph rules consolidated */
 p {
   margin-block-start: 1.5em;
@@ -37,7 +52,7 @@ pre {
 }
 
 /* Inline code */
-  
+
 /* Responsive embed utilities for slides/iframes */
 .embed-responsive,
 .slides-embed {
@@ -791,7 +806,7 @@ nav.navigation a {
   font-family: "Roboto Mono", monospace;
   font-size: 5rem;
   font-weight: 700;
-  color:#1d1d1d;
+  color: #1d1d1d;
   line-height: 1;
 
   background: linear-gradient(90deg, #8ac149, #61c419);
@@ -803,7 +818,7 @@ nav.navigation a {
   font-family: "Roboto Mono", monospace;
   font-size: 5rem;
   font-weight: 700;
-  color:#1d1d1d;
+  color: #1d1d1d;
   line-height: 1;
 
   background: linear-gradient(90deg, #8ac149, #61c419);
@@ -811,13 +826,12 @@ nav.navigation a {
   background-clip: text;
 }
 
-
 @media only screen and (max-width: 520px) {
   .bigitem-container .datetime {
     font-size: 2.2rem;
     margin: 1.5rem 0;
   }
-  
+
   .bignumber-container .bignum {
     font-size: 2.2rem;
     margin: 1.5rem 0;
@@ -852,15 +866,17 @@ nav.navigation a {
   position: relative; /* for ::before */
   background-size: 200% 100%;
   background-position: 0% 50%;
-  transition: transform 300ms cubic-bezier(0.2,0.9,0.2,1),
+  transition: transform 300ms cubic-bezier(0.2, 0.9, 0.2, 1),
     box-shadow 300ms ease, background-position 600ms ease, opacity 220ms ease;
-  box-shadow: 0 8px 28px rgba(138,193,73,0.08), inset 0 -1px 0 rgba(255,255,255,0.03);
+  box-shadow: 0 8px 28px rgba(138, 193, 73, 0.08),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .donating a:hover,
 .donating a:focus {
   transform: translateY(-6px) scale(1.06);
-  box-shadow: 0 20px 60px rgba(138,193,73,0.18), 0 6px 26px rgba(0,0,0,0.45);
+  box-shadow: 0 20px 60px rgba(138, 193, 73, 0.18),
+    0 6px 26px rgba(0, 0, 0, 0.45);
   background-position: 100% 50%;
   color: #fff;
   outline: none;
@@ -876,7 +892,11 @@ nav.navigation a {
   width: 92%;
   height: 92%;
   border-radius: inherit;
-  background: radial-gradient(circle at center, rgba(138,193,73,0.08), rgba(138,193,73,0));
+  background: radial-gradient(
+    circle at center,
+    rgba(138, 193, 73, 0.08),
+    rgba(138, 193, 73, 0)
+  );
   pointer-events: none;
   opacity: 0;
   transition: transform 350ms ease, opacity 350ms ease;
@@ -1323,14 +1343,14 @@ th {
   color: var(--nav-accent);
   cursor: default;
   white-space: nowrap;
-  background: rgba(29,29,29,0.9);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  background: rgba(29, 29, 29, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 tr > td {
-  border-bottom: 1px solid rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
 tr:nth-child(odd) > td {
-  background: rgba(138,193,73,0.02);
+  background: rgba(138, 193, 73, 0.02);
 }
 
 @media only screen and (max-width: 720px) {
@@ -1489,6 +1509,6 @@ html {
   #list-page .item {
     padding-bottom: 12px;
     margin-bottom: 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
   }
 }
