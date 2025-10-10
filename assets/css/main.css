@@ -23,7 +23,6 @@ h2,
 h3 {
   font-weight: 400;
 }
-
 /* Paragraph rules consolidated */
 p {
   margin-block-start: 1.5em;
@@ -822,6 +821,84 @@ nav.navigation a {
   .bignumber-container .bignum {
     font-size: 2.2rem;
     margin: 1.5rem 0;
+  }
+}
+
+.donating {
+  text-align: center;
+  margin: 4rem auto;
+  width: fit-content;
+}
+
+/* Large donating display button overrides */
+.donating a {
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid rgba(138, 193, 73, 0.06);
+  backdrop-filter: blur(4px) saturate(0.9);
+  background: linear-gradient(
+    90deg,
+    rgba(138, 193, 73, 0.18),
+    rgba(138, 193, 73, 0.08)
+  );
+  color: #e9f6db;
+  font-weight: 600;
+  font-size: 6rem; /* requested large font */
+  line-height: 1;
+  padding: 1rem 4rem; /* tighten padding for large display */
+  animation: pagination-float 420ms cubic-bezier(0.2, 0.9, 0.2, 1) both,
+    pagination-breath 8s ease-in-out 420ms infinite;
+
+  position: relative; /* for ::before */
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  transition: transform 300ms cubic-bezier(0.2,0.9,0.2,1),
+    box-shadow 300ms ease, background-position 600ms ease, opacity 220ms ease;
+  box-shadow: 0 8px 28px rgba(138,193,73,0.08), inset 0 -1px 0 rgba(255,255,255,0.03);
+}
+
+.donating a:hover,
+.donating a:focus {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 20px 60px rgba(138,193,73,0.18), 0 6px 26px rgba(0,0,0,0.45);
+  background-position: 100% 50%;
+  color: #fff;
+  outline: none;
+}
+
+/* subtle pulse layer behind the button for hover */
+.donating a::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  width: 92%;
+  height: 92%;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(138,193,73,0.08), rgba(138,193,73,0));
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 350ms ease, opacity 350ms ease;
+}
+.donating a:hover::before,
+.donating a:focus::before {
+  transform: translate(-50%, -50%) scale(1.08);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donating a,
+  .donating a::before {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .donating a {
+    font-size: 3rem; /* scale down on small screens */
+    padding: 0.7rem 1rem;
   }
 }
 

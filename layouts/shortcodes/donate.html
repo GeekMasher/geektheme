@@ -1,0 +1,25 @@
+{{/*
+Shortcode: donate
+
+Usage:
+  {{< donate "https://example.org/donate" >}}
+  {{< donate url="https://example.org/donate" text="Donate now" class="big" >}}
+
+Parameters:
+  - url (positional or named): the destination URL
+  - text: optional link text (default: "Donate")
+  - class: optional CSS class to apply
+*/}}
+
+{{ $url := .Get "url" | default (.Get 0) | default "" }}
+{{ $text := .Get "text" | default "Donate" }}
+{{ $class := .Get "class" | default "donate-link" }}
+
+{{ if eq $url "" }}
+  {{/* No URL - render nothing to avoid broken link */}}
+  {{ return }}
+{{ end }}
+
+<div class="donating donate-shortcode {{ $class }}" style="text-align:center;">
+  <a href="{{ $url | safeURL }}" class="button" target="_blank" rel="noopener noreferrer">{{ $text }}</a>
+</div>
