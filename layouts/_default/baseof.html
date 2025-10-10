@@ -4,7 +4,12 @@
   {{ partial "head.html" . }}
 </head>
 <body>
-  {{ partial "nav.html" . }}
+  {{ if .Site.Params.navbar && .Site.Params.navbar.enabled }}
+    {{ partial "navbar.html" . }}
+  {{ else }}
+    {{ partial "nav.html" . }}
+  {{ end }}
+
   <main>
     {{ block "main" . }}{{ end }}
   </main>
