@@ -1,0 +1,7 @@
+{{ $fill := .fill | default "#bbbbbb" }}
+{{ $w := .width | default 28 }}
+{{ $h := .height | default 28 }}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ $w }}" height="{{ $h }}" viewBox="0 0 24 24" role="img" aria-label="Twitch">
+  <rect width="24" height="24" rx="3" fill="{{ $fill }}" />
+  <path fill="#ffffff" d="M7 7h2v6H7V7zm4 0h2v6h-2V7zM4 3l-1 4v12h5v3l3-3h5l4-4V3H4zM20 11l-2 2h-3l-3 3v-3H6V5h14v6z"/>
+</svg>

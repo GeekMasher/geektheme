@@ -1,0 +1,7 @@
+{{ $fill := .fill | default "#bbbbbb" }}
+{{ $w := .width | default 28 }}
+{{ $h := .height | default 28 }}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ $w }}" height="{{ $h }}" viewBox="0 0 24 24" role="img" aria-label="LinkedIn">
+  <rect width="24" height="24" rx="3" fill="{{ $fill }}" />
+  <path fill="#ffffff" d="M6.94 8.5H4.5V19h2.44V8.5zM5.7 6.9c-.78 0-1.4-.64-1.4-1.42 0-.79.62-1.43 1.4-1.43.78 0 1.4.64 1.4 1.43 0 .78-.62 1.42-1.4 1.42zM20 19h-2.44v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-1.99 1.34-1.99 2.73V19H11.4V8.5H13.8v1.42h.03c.34-.64 1.17-1.32 2.4-1.32 2.57 0 3.04 1.69 3.04 3.89V19z"/>
+</svg>
