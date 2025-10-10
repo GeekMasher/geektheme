@@ -1,0 +1,18 @@
+{
+    "delay": 40,
+    "deleteSpeed": 40,
+    "infoDelay": 1,
+    "loop": true,
+    "writter": [
+        {
+            "title": "This is my blog",
+            "subtitle": "I write about tech, programming, and other stuff."
+        },
+        "Securing Code|Static Code Analysis, Web Security, and Finding Awesome Bugs...",
+        ["Developing Software", "Python & Rust in Neovim..."],
+        {
+            "title": "Homelab",
+            "subtitle": "Self Hosting, Hardware, and Services..."
+        }
+    ]
+}
